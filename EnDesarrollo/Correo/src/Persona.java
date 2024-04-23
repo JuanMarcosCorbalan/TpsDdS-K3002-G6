@@ -4,5 +4,7 @@ public class Persona {
     int codigoPostal;
     String localidad;
 
-
+    public Persona(String nombre) {
+    this.nombre = nombre;
+    }
 }

@@ -5,20 +5,30 @@ public class Envio {
     Persona remitente;
     int precio;
     String codigoRastreo;
-    ArrayList<Sucursal> sucursales;
     Cartero cartero;
+    ArrayList<SucursalVisitada> sucursales;
 
-    public Envio(Persona destinatario, Persona remitente, int precio, String codigoRastreo, ArrayList<Sucursal> sucursales, Cartero cartero) {
+    public Envio(Persona destinatario, Persona remitente, int precio, String codigoRastreo, ArrayList<SucursalVisitada> sucursales, Cartero cartero) {
         this.destinatario = destinatario;
         this.remitente = remitente;
         this.precio = precio;
         this.codigoRastreo = codigoRastreo;
         this.sucursales = sucursales;
         this.cartero = cartero;
+
     }
 
-    public void agregarSucursal(Sucursal sucursalNueva){
+    public void agregarSucursal(SucursalVisitada sucursalNueva){
         sucursales.add(sucursalNueva);
+    }
+    public void mostrarSucursalesVisitadas()
+    {
+        for(int indice=0;indice<sucursales.size();indice++)
+        {
+            System.out.println(sucursales.get(indice).sucursalActual.nombreSucursal);
+            System.out.println(sucursales.get(indice).fecha);
+            System.out.println(sucursales.get(indice).hora);
+        }
     }
 
     public void realizar(){
