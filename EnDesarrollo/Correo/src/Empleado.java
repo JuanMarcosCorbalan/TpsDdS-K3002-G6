@@ -4,6 +4,10 @@ public class Empleado  {
     int id;
     //Sucursal sucursal;
 
+
+    public Empleado() {
+    }
+
     public Empleado(String nombre, int dni, int id) {
         this.nombre = nombre;
         this.dni = dni;

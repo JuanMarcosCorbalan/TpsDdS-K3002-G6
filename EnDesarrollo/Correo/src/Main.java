@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.lang.reflect.*;
 
 public class Main {
     //PERSONAS DEFAULT
@@ -13,11 +14,64 @@ public class Main {
 
     public static void main(String[] args) {
 
-
+        Scanner scanner = new Scanner(System.in);
         //LISTA ENVIOS, SE ANIADE UN ENVIO CADA VEZ QUE SE CREA
         ArrayList<Envio> listaEnvios = new ArrayList<>();
 
         //ACA IRIA LA INTERFAZ DE USUARIO DEPENDIENDO DE LO QUE QUIERA HACER, SE PUEDE CON SCANNER
+
+        // IMPLEMENTACION DE CONSOLA
+        while (true) {
+            System.out.println("Ingresa el nombre de la clase que deseas instanciar (o 'salir' para salir):");
+            String className = scanner.nextLine();
+
+            if (className.equalsIgnoreCase("salir")) {
+                break;
+            }
+
+            try {
+                Class<?> cls = Class.forName(className);
+
+                // Obtener constructores de la clase
+                Constructor<?>[] constructors = cls.getDeclaredConstructors();
+                if (constructors.length == 0) {
+                    System.out.println("La clase no tiene constructores accesibles.");
+                    continue;
+                }
+
+                // Mostrar los constructores de la clase
+                System.out.println("Selecciona un constructor:");
+                for (int i = 0; i < constructors.length; i++) {
+                    System.out.println(i + ": " + constructors[i].toString());
+                }
+
+                // Obtener el índice del constructor seleccionado
+                int constructorIndex = scanner.nextInt();
+                scanner.nextLine(); // Limpiar el buffer
+
+                // Obtener los parámetros del constructor seleccionado
+                Parameter[] parameters = constructors[constructorIndex].getParameters();
+                Object[] parameterValues = new Object[parameters.length];
+                for (int i = 0; i < parameters.length; i++) {
+                    System.out.println("Ingresa el valor para el parámetro " + parameters[i].getName() + " de tipo " + parameters[i].getType().getSimpleName() + ":");
+                    String paramValue = scanner.nextLine();
+                    parameterValues[i] = convertToType(paramValue, parameters[i].getType());
+                }
+
+                // Instanciar la clase con los parámetros proporcionados
+                Object obj = constructors[constructorIndex].newInstance(parameterValues);
+
+                // Imprimir la instancia creada
+                System.out.println("Instancia creada: " + obj.toString());
+
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                     | InvocationTargetException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+        scanner.close();
+
+
         //Se podria manejar todos los errores aca y no dejar entrar a la funcion si ingresa un codigo invalido
 
         //se le deberia pedir al usuario tanto el precio como el codigo rastreo a la hora de crear el envio
@@ -91,5 +145,23 @@ public class Main {
             return indice;
         }
     }
+
+    // Método para convertir el valor de entrada a un tipo específico
+    private static Object convertToType(String value, Class<?> type) {
+        if (type.equals(int.class) || type.equals(Integer.class)) {
+            return Integer.parseInt(value);
+        } else if (type.equals(double.class) || type.equals(Double.class)) {
+            return Double.parseDouble(value);
+        } else if (type.equals(float.class) || type.equals(Float.class)) {
+            return Float.parseFloat(value);
+        } else if (type.equals(boolean.class) || type.equals(Boolean.class)) {
+            return Boolean.parseBoolean(value);
+        } else if (type.equals(String.class)) {
+            return value;
+        }
+        // Se pueden agregar mas tipos si necesitamos
+        return null;
+    }
+
 
     }
