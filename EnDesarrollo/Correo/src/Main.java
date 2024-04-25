@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class Main {
     //PERSONAS DEFAULT
     private static Persona destinatario = new Persona("Juan");
-
     private static Persona remitente = new Persona("Pedro");
     private static Cartero cartero = new Cartero("Nombre", 25689485, 4, "C");
     //SUCURSALES
@@ -19,28 +18,19 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        ArrayList<SucursalVisitada> sucursales = new ArrayList<>();
 
         //LISTA ENVIOS, SE ANIADE UN ENVIO CADA VEZ QUE SE CREA
         ArrayList<Envio> listaEnvios = new ArrayList<>();
 
-        //ACA IRIA LA INTERFAZ DE USUARIO DEPENDIENDO DE LO QUE QUIERA HACER, SE PUEDE CON SCANNER
         // IMPLEMENTACION DE CONSOLA
-        System.out.println("Ingrese el precio del envio");
-        int precio  = Integer.parseInt(scanner.nextLine());
-        System.out.println("Ingrese el codigo de seguimiento");
+        //System.out.println("Ingrese el precio del envio");
+        //int precio  = Integer.parseInt(scanner.nextLine());
+        int precio = 2500;
+        System.out.println("Ingrese el codigo de seguimiento para crear un nuevo envio");
         String codigoRastreo  = scanner.nextLine();
-        
-
-        //Se podria manejar todos los errores aca y no dejar entrar a la funcion si ingresa un codigo invalido
-
-        //se le deberia pedir al usuario tanto el precio como el codigo rastreo a la hora de crear el envio
-        //el codigo rastreo se podria generar automaticamente
-
-        //para las consultas sobre un envio ya hecho se pediria codigoRastreo nada mas
 
         realizarEnvio(listaEnvios,precio,codigoRastreo);//creo un nuevo envio con precio y codigoRastreo
-        //aniado 2 sucursales
+        //añado 2 sucursales
         aniadirSucursal(listaEnvios,codigoRastreo,moreno,15,"25/03");
         aniadirSucursal(listaEnvios,codigoRastreo,retiro,15,"26/03");
 
@@ -71,7 +61,7 @@ public class Main {
     }
     public static void mostrarCamino(ArrayList<Envio> listaEnvios, String codigoRastreo)
     {
-        //FALTA MANEJO DE QUE PASA SI EL ENVIO NO EXISTE, buscarIndiceSucursal devuelve -1
+        //devuelve -1 en caso de error, falta manejarlo
         int indice = buscarIndiceSucursal(listaEnvios,codigoRastreo);
 
         listaEnvios.get(indice).mostrarSucursalesVisitadas();
@@ -79,9 +69,9 @@ public class Main {
 
     public static void aniadirSucursal(ArrayList<Envio> listaEnvios, String codigoRastreo, Sucursal sucursal,int hora,String fecha)
     {
-        //FALTA MANEJO DE QUE PASA SI EL ENVIO NO EXISTE, buscarIndiceSucursal devuelve -1
+        //devuelve -1 en caso de error, falta manejarlo
         int indice = buscarIndiceSucursal(listaEnvios,codigoRastreo);
-        //Creo envio auxiliar, la sucursal visitada y la aniado al envio
+        //Creo envio auxiliar, la sucursal visitada y la añado al envio
         Envio envioBuscado = listaEnvios.get(indice);
         SucursalVisitada nuevaSucursal = new SucursalVisitada(envioBuscado,sucursal,hora,fecha);
         envioBuscado.agregarSucursal(nuevaSucursal);

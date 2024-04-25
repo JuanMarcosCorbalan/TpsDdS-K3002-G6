@@ -25,9 +25,9 @@ public class Envio {
     {
         for(int indice=0;indice<sucursales.size();indice++)
         {
-            System.out.println(sucursales.get(indice).sucursalActual.nombreSucursal);
-            System.out.println(sucursales.get(indice).fecha);
-            System.out.println(sucursales.get(indice).hora);
+            System.out.println("Sucursal: " + sucursales.get(indice).sucursalActual.nombreSucursal);
+            System.out.println("Fecha: " + sucursales.get(indice).fecha);
+            System.out.println("Hora: " + sucursales.get(indice).hora);
         }
     }
 
