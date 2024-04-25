@@ -1,10 +1,14 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.lang.reflect.*;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Main {
     //PERSONAS DEFAULT
     private static Persona destinatario = new Persona("Juan");
+
     private static Persona remitente = new Persona("Pedro");
     private static Cartero cartero = new Cartero("Nombre", 25689485, 4, "C");
     //SUCURSALES
@@ -12,82 +16,68 @@ public class Main {
     private static Sucursal moreno = new Sucursal("Sucursal Moreno",2,"Moreno");
     private static Sucursal retiro = new Sucursal("Sucursal Retiro",3,"CABA");
 
+    private static Map<String, Object> objetos = new HashMap<>();
+
+
     public static void main(String[] args) {
+//        int precio = 2500;
+//        String codigoRastreo = "2403";
 
         Scanner scanner = new Scanner(System.in);
+        ArrayList<SucursalVisitada> sucursales = new ArrayList<>();
+
+        // creo que el envio es uno solo, no se si tiene mucho sentido que se puedan hacer varios envios
+        //Envio nuevoEnvio = new Envio(destinatario,remitente,precio,codigoRastreo,sucursales,cartero);
+
+
         //LISTA ENVIOS, SE ANIADE UN ENVIO CADA VEZ QUE SE CREA
         ArrayList<Envio> listaEnvios = new ArrayList<>();
 
         //ACA IRIA LA INTERFAZ DE USUARIO DEPENDIENDO DE LO QUE QUIERA HACER, SE PUEDE CON SCANNER
-
         // IMPLEMENTACION DE CONSOLA
-        while (true) {
-            System.out.println("Ingresa el nombre de la clase que deseas instanciar (o 'salir' para salir):");
-            String className = scanner.nextLine();
+        System.out.println("Ingrese el precio del envio");
+        int precio  = Integer.parseInt(scanner.nextLine());
+        System.out.println("Ingrese el codigo de seguimiento");
+        String codigoRastreo  = scanner.nextLine();
 
-            if (className.equalsIgnoreCase("salir")) {
-                break;
-            }
-
-            try {
-                Class<?> cls = Class.forName(className);
-
-                // Obtener constructores de la clase
-                Constructor<?>[] constructors = cls.getDeclaredConstructors();
-                if (constructors.length == 0) {
-                    System.out.println("La clase no tiene constructores accesibles.");
-                    continue;
-                }
-
-                // Mostrar los constructores de la clase
-                System.out.println("Selecciona un constructor:");
-                for (int i = 0; i < constructors.length; i++) {
-                    System.out.println(i + ": " + constructors[i].toString());
-                }
-
-                // Obtener el índice del constructor seleccionado
-                int constructorIndex = scanner.nextInt();
-                scanner.nextLine(); // Limpiar el buffer
-
-                // Obtener los parámetros del constructor seleccionado
-                Parameter[] parameters = constructors[constructorIndex].getParameters();
-                Object[] parameterValues = new Object[parameters.length];
-                for (int i = 0; i < parameters.length; i++) {
-                    System.out.println("Ingresa el valor para el parámetro " + parameters[i].getName() + " de tipo " + parameters[i].getType().getSimpleName() + ":");
-                    String paramValue = scanner.nextLine();
-                    parameterValues[i] = convertToType(paramValue, parameters[i].getType());
-                }
-
-                // Instanciar la clase con los parámetros proporcionados
-                Object obj = constructors[constructorIndex].newInstance(parameterValues);
-
-                // Imprimir la instancia creada
-                System.out.println("Instancia creada: " + obj.toString());
-
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-                     | InvocationTargetException e) {
-                System.out.println("Error: " + e.getMessage());
-            }
-        }
-        scanner.close();
 
 
         //Se podria manejar todos los errores aca y no dejar entrar a la funcion si ingresa un codigo invalido
 
         //se le deberia pedir al usuario tanto el precio como el codigo rastreo a la hora de crear el envio
         //el codigo rastreo se podria generar automaticamente
-        int precio = 2500;
-        String codigoRastreo = "2403";
+
         //para las consultas sobre un envio ya hecho se pediria codigoRastreo nada mas
 
         realizarEnvio(listaEnvios,precio,codigoRastreo);//creo un nuevo envio con precio y codigoRastreo
         //aniado 2 sucursales
         aniadirSucursal(listaEnvios,codigoRastreo,moreno,15,"25/03");
         aniadirSucursal(listaEnvios,codigoRastreo,retiro,15,"26/03");
-        //busco sucursal actual, la ultima en la que estuvo el paquete
-        buscarSucursalActual(listaEnvios,codigoRastreo);
-        //muestro todas las sucursales con hora y fecha en orden
-        mostrarCamino(listaEnvios,codigoRastreo);
+
+        while(true){
+            System.out.println("Ingrese el numero de operacion a realizar");
+            System.out.println("1 para mostrar la ubicacion actual");
+            System.out.println("2 para mostrar el recorrido completo");
+            System.out.println("0 para salir");
+
+            int opcion = Integer.parseInt(scanner.nextLine());
+
+            if (opcion == 0) {
+                break;
+            }
+            if (opcion == 1) {
+                //busco sucursal actual, la ultima en la que estuvo el paquete
+                buscarSucursalActual(listaEnvios,codigoRastreo);
+            }
+            if (opcion == 2) {
+                //muestro todas las sucursales con hora y fecha en orden
+                mostrarCamino(listaEnvios,codigoRastreo);
+            }
+        }
+
+        scanner.close();
+
+
     }
     public static void mostrarCamino(ArrayList<Envio> listaEnvios, String codigoRastreo)
     {
@@ -146,22 +136,24 @@ public class Main {
         }
     }
 
-    // Método para convertir el valor de entrada a un tipo específico
-    private static Object convertToType(String value, Class<?> type) {
-        if (type.equals(int.class) || type.equals(Integer.class)) {
-            return Integer.parseInt(value);
-        } else if (type.equals(double.class) || type.equals(Double.class)) {
-            return Double.parseDouble(value);
-        } else if (type.equals(float.class) || type.equals(Float.class)) {
-            return Float.parseFloat(value);
-        } else if (type.equals(boolean.class) || type.equals(Boolean.class)) {
-            return Boolean.parseBoolean(value);
-        } else if (type.equals(String.class)) {
-            return value;
-        }
-        // Se pueden agregar mas tipos si necesitamos
-        return null;
-    }
 
-
+//    private static void llamarMetodo(Scanner scanner) {
+//        System.out.println("Ingresa el nombre del objeto:");
+//        String objetoNombre = scanner.nextLine();
+//        Object objeto = objetos.get(objetoNombre);
+//        if (objeto == null) {
+//            System.out.println("Objeto no encontrado.");
+//            return;
+//        }
+//
+//        System.out.println("Ingresa el nombre del método que desea llamar:");
+//        String methodName = scanner.nextLine();
+//
+//        // Invocar al método correspondiente en el objeto encontrado
+//        try {
+//            objeto.getClass().getMethod(methodName).invoke(objeto);
+//        } catch (Exception e) {
+//            System.out.println("Error: " + e.getMessage());
+//        }
+//    }
     }
