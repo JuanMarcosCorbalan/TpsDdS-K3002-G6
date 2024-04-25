@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.lang.reflect.*;
-import java.util.HashMap;
-import java.util.Map;
+
 
 
 public class Main {
@@ -16,19 +14,12 @@ public class Main {
     private static Sucursal moreno = new Sucursal("Sucursal Moreno",2,"Moreno");
     private static Sucursal retiro = new Sucursal("Sucursal Retiro",3,"CABA");
 
-    private static Map<String, Object> objetos = new HashMap<>();
 
 
     public static void main(String[] args) {
-//        int precio = 2500;
-//        String codigoRastreo = "2403";
 
         Scanner scanner = new Scanner(System.in);
         ArrayList<SucursalVisitada> sucursales = new ArrayList<>();
-
-        // creo que el envio es uno solo, no se si tiene mucho sentido que se puedan hacer varios envios
-        //Envio nuevoEnvio = new Envio(destinatario,remitente,precio,codigoRastreo,sucursales,cartero);
-
 
         //LISTA ENVIOS, SE ANIADE UN ENVIO CADA VEZ QUE SE CREA
         ArrayList<Envio> listaEnvios = new ArrayList<>();
@@ -39,8 +30,7 @@ public class Main {
         int precio  = Integer.parseInt(scanner.nextLine());
         System.out.println("Ingrese el codigo de seguimiento");
         String codigoRastreo  = scanner.nextLine();
-
-
+        
 
         //Se podria manejar todos los errores aca y no dejar entrar a la funcion si ingresa un codigo invalido
 
@@ -137,23 +127,4 @@ public class Main {
     }
 
 
-//    private static void llamarMetodo(Scanner scanner) {
-//        System.out.println("Ingresa el nombre del objeto:");
-//        String objetoNombre = scanner.nextLine();
-//        Object objeto = objetos.get(objetoNombre);
-//        if (objeto == null) {
-//            System.out.println("Objeto no encontrado.");
-//            return;
-//        }
-//
-//        System.out.println("Ingresa el nombre del método que desea llamar:");
-//        String methodName = scanner.nextLine();
-//
-//        // Invocar al método correspondiente en el objeto encontrado
-//        try {
-//            objeto.getClass().getMethod(methodName).invoke(objeto);
-//        } catch (Exception e) {
-//            System.out.println("Error: " + e.getMessage());
-//        }
-//    }
-    }
+}
