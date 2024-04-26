@@ -7,3 +7,4 @@ Integrantes:
 -Tomas Laurenzano
 -Roger Ramos
 -Juan Corbalan
+-Joaquin Bergara
