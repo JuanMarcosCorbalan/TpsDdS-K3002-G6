@@ -1,3 +1,4 @@
+package org.example;
 import java.io.*;
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ public class Algoritmo {
         BufferedReader entrada = new BufferedReader(new FileReader(nombreArchivo));
         String lineaLeida;
         while((lineaLeida = entrada.readLine()) != null) {
-            if(lineaLeida.equals(password)) {
+            if(lineaLeida.equalsIgnoreCase(password)) {
                 return true;
             }
         }

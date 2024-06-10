@@ -1,4 +1,7 @@
+package org.example;
+
 import java.io.*;
+import org.example.Algoritmo;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
